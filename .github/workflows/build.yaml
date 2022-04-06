@@ -1,0 +1,32 @@
+name: Build workflow
+
+on:
+  push:
+    branches:
+      - feature/*
+      - hotfix/*
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Get pom version from main
+        run: echo "MAIN_POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get pom version from feature branch
+        run: echo "FEATURE_POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Check feature version is not behind
+        run: |
+          LOWER_VERSION=$(printf '%s\n%s' "$MAIN_POM_VERSION" "$FEATURE_POM_VERSION" | sort -V | head -n 1)
+          [[ "$FEATURE_POM_VERSION" == "$LOWER_VERSION" ]] && echo "feature is behind..." && exit 1
+
+      - run: echo 'building...'
