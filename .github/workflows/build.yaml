@@ -27,7 +27,7 @@ jobs:
       - name: Check feature version is not behind
         shell: bash
         run: |
-          LOWER_VERSION=$(printf '%s\n%s' "${MAIN_POM_VERSION}" "{$FEATURE_POM_VERSION}" | sort -V | head -n 1)
+          LOWER_VERSION=$(printf '%s\n%s' "${MAIN_POM_VERSION}" "${FEATURE_POM_VERSION}" | sort -V | head -n 1)
           echo "version from feature: ${FEATURE_POM_VERSION}"
           echo "version from main: ${MAIN_POM_VERSION}"
           echo "lower version: ${LOWER_VERSION}"
