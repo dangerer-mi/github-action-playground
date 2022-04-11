@@ -27,12 +27,12 @@ jobs:
       - name: Check feature version is not behind
         shell: bash
         run: |
-          LOWER_VERSION=$(printf '%s\n%s' "$MAIN_POM_VERSION" "$FEATURE_POM_VERSION" | sort -V | head -n 1)
-          echo "version from feature: $FEATURE_POM_VERSION"
-          echo "version from main: $MAIN_POM_VERSION"
-          echo "lower version: $LOWER_VERSION"
-          if [ "$FEATURE_POM_VERSION" == "$LOWER_VERSION" ]; then
-            echo "Pom version in feature branch is behind. Do bump version and try again."
+          LOWER_VERSION=$(printf '%s\n%s' "${MAIN_POM_VERSION}" "{$FEATURE_POM_VERSION}" | sort -V | head -n 1)
+          echo "version from feature: ${FEATURE_POM_VERSION}"
+          echo "version from main: ${MAIN_POM_VERSION}"
+          echo "lower version: ${LOWER_VERSION}"
+          if [ "${FEATURE_POM_VERSION}" == "${LOWER_VERSION}" ]; then
+            echo "Pom version in feature branch is behind. Bump version."
             exit 1
           fi
 
