@@ -1,0 +1,16 @@
+name: Bump Version
+
+on:
+  workflow_run:
+    workflows:
+      - "Release"
+    types:
+      - completed
+
+jobs:
+  bump-version:
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Running
+        run: echo "running"
